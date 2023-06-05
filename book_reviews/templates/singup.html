@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %} Registro {% endblock %}
+
+{% block content %}
+
+<main class="container py-5">
+    <div class="row">
+        <form method="POST" class=" card card-body">
+            {% csrf_token %}
+            <h1>Sing Up</h1>
+            {{error}}
+            {{form.as_p}}
+            <button class="btn btn-primary">
+                Sing Up
+            </button>
+        </form>
+    </div>
+    
+    
+</main>
+
+
+{% endblock %}
