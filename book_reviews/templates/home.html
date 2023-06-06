@@ -23,5 +23,18 @@
         
     </section>
 </main>
+{% for libro in libros %}
+  <div class="libro">
+    <div class="imagen">
+      <img src="{{ libro.imagen }}" alt="{{ libro.titulo }}">
+    </div>
+    <div class="detalles">
+      <h2>{{ libro.titulo }}</h2>
+      <p>Autor: {{ libro.autor.nombre }}</p>
+      <p>Descripción: {{ libro.resumen }}</p>
+      <p>Valoración: {{ libro.valoracion }}</p>
+    </div>
+  </div>
+{% endfor %}
 
 {% endblock %}

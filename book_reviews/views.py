@@ -5,10 +5,12 @@ from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
+from .models import Libro
 
 # Create your views here.
 def home(request):
-    return render(request, 'home.html')
+    libros = Libro.objects.all()
+    return render(request, 'home.html', {'libros': libros})
 
 def singup(request):
 
@@ -85,3 +87,4 @@ def successfull(request):
 @user_passes_test(lambda u: u.is_superuser)
 def administrador(request):
     return render(request, 'administrador.html')
+
