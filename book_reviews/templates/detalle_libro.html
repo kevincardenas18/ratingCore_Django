@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %} {{ libro.titulo }} {% endblock %}
+
+{% block content %}
+    <h1>{{ libro.titulo }}</h1>
+    <img src="{{ libro.imagen }}" alt="{{ libro.titulo }}">
+    <p>Autor: {{ libro.autor.nombre }}</p>
+    <p>Descripción: {{ libro.resumen }}</p>
+    <p>Valoración: {{ libro.valoracion }}</p>
+
+{% endblock %}

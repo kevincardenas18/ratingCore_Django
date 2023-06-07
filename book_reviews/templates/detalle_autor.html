@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %} {{ autor.nombre }} {% endblock %}
+
+{% block content %}
+    <h1>{{ autor.nombre }}</h1>
+    <p>País: {{ autor.pais }}</p>
+    <p>Fecha de Nacimiento: {{ autor.fecha_nacimiento }}</p>
+    <img src="{{ autor.foto }}" alt="{{ autor.nombre }}">
+    <p>Biografía: {{ autor.resumen }}</p>
+{% endblock %}

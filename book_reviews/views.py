@@ -5,7 +5,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
-from .models import Libro
+from .models import Libro, Autor
 
 # Create your views here.
 def home(request):
@@ -88,3 +88,10 @@ def successfull(request):
 def administrador(request):
     return render(request, 'administrador.html')
 
+def detalle_libro(request, libro_id):
+    libro = get_object_or_404(Libro, pk=libro_id)
+    return render(request, 'detalle_libro.html', {'libro': libro})
+
+def detalle_autor(request, autor_id):
+    autor = get_object_or_404(Autor, pk=autor_id)
+    return render(request, 'detalle_autor.html', {'autor': autor})

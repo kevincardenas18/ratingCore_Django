@@ -10,6 +10,8 @@ class Categoria(models.Model):
 
 class Autor(models.Model):
     nombre = models.CharField(max_length=100)
+    foto = models.URLField(null=True)
+    resumen = models.TextField(null=True) 
     pais = models.CharField(max_length=100)
     fecha_nacimiento = models.DateField()
     

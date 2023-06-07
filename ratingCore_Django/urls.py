@@ -29,4 +29,6 @@ urlpatterns = [
     path('successfull', views.successfull, name = 'successfull'),
     path('profile/deleteUser/<int:user_id>', views.deleteUser),
     path('administrador/', views.administrador, name = 'administrador'),
+    path('libro/<int:libro_id>/', views.detalle_libro, name='detalle_libro'),
+    path('autor/<int:autor_id>/', views.detalle_autor, name='detalle_autor'),
 ]
