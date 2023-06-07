@@ -25,3 +25,31 @@
   .detalles p {
     margin-bottom: 10px;
   }
+
+  .autor {
+    display: flex;
+    margin-bottom: 20px;
+  }
+  
+  .foto {
+    flex: 0 0 150px;
+    margin-right: 10px;
+  }
+  
+  .foto img {
+    width: 100%;
+    height: auto;
+  }
+  
+  .detalles-autor {
+    flex: 1;
+  }
+  
+  .detalles-autor h2 {
+    font-size: 20px;
+    margin-bottom: 5px;
+  }
+  
+  .detalles-autor p {
+    margin-bottom: 10px;
+  }
