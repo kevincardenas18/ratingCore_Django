@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %} Autores {% endblock %}
+
+{% block content %}
+
+{% for autor in autores %}
+  <div class="autor">
+    <div class="foto">
+      <a href="{% url 'detalle_autor' autor_id=autor.id %}">
+        <img src="{{ autor.foto }}" alt="{{ autor.nombre }}">
+      </a>
+    </div>
+    <div class="detalles-autor">
+      <h2>
+        <a href="{% url 'detalle_autor' autor_id=autor.id %}">
+          {{ autor.nombre }}
+        </a>
+      </h2>
+    </div>
+  </div>
+{% endfor %}
+
+{% endblock %}

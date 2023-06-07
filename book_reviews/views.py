@@ -88,6 +88,10 @@ def successfull(request):
 def administrador(request):
     return render(request, 'administrador.html')
 
+def autor(request):
+    autores = Autor.objects.all()
+    return render(request, 'autor.html', {'autores': autores})
+
 def detalle_libro(request, libro_id):
     libro = get_object_or_404(Libro, pk=libro_id)
     return render(request, 'detalle_libro.html', {'libro': libro})
