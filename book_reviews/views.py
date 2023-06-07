@@ -5,7 +5,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
-from .models import Libro, Autor
+from .models import Libro, Autor, Categoria
 
 # Create your views here.
 def home(request):
@@ -99,3 +99,7 @@ def detalle_libro(request, libro_id):
 def detalle_autor(request, autor_id):
     autor = get_object_or_404(Autor, pk=autor_id)
     return render(request, 'detalle_autor.html', {'autor': autor})
+
+def lista_categorias(request):
+    categorias = Categoria.objects.all()
+    return render(request, 'categoria.html', {'categorias': categorias})
