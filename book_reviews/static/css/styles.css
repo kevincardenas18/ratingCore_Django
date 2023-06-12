@@ -1,3 +1,14 @@
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.navbar-brand img {
+  margin-right: 5px; /* Ajusta el margen según el espaciado deseado */
+}
+
 .libro {
     display: flex;
     margin-bottom: 20px;
@@ -53,3 +64,5 @@
   .detalles-autor p {
     margin-bottom: 10px;
   }
+
+  
