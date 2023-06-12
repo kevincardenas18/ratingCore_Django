@@ -9,4 +9,14 @@
     <p>Descripción: {{ libro.resumen }}</p>
     <p>Valoración: {{ libro.valoracion }}</p>
 
+
+    <h2>Comentarios</h2>
+    <ul>
+        {% for comentario in comentarios %}
+            <li>{{ comentario.comentario }} - {{ comentario.usuario.username }}</li>
+        {% empty %}
+            <li>No hay comentarios aún.</li>
+        {% endfor %}
+    </ul>
+
 {% endblock %}

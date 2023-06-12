@@ -30,10 +30,10 @@ class Libro(models.Model):
         return str(self.titulo)
 
 class Review(models.Model):
-    comentario = models.TextField()
+    comentario = models.TextField(null=True)
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     libro = models.ForeignKey(Libro, on_delete=models.CASCADE)
-    valoracion = models.IntegerField() # Campo de valoración del usuario para el libro
+    valoracion = models.IntegerField(null=True) # Campo de valoración del usuario para el libro
 
     def __str__(self):
         return str(self.comentario)

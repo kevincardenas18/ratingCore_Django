@@ -5,7 +5,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
-from .models import Libro, Autor, Categoria
+from .models import Libro, Autor, Categoria, Review
 
 # Create your views here.
 def home(request):
@@ -94,7 +94,10 @@ def autor(request):
 
 def detalle_libro(request, libro_id):
     libro = get_object_or_404(Libro, pk=libro_id)
-    return render(request, 'detalle_libro.html', {'libro': libro})
+
+    comentarios = Review.objects.filter(libro=libro)
+
+    return render(request, 'detalle_libro.html', {'libro': libro, 'comentarios': comentarios})
 
 def detalle_autor(request, autor_id):
     autor = get_object_or_404(Autor, pk=autor_id)
@@ -103,3 +106,4 @@ def detalle_autor(request, autor_id):
 def lista_categorias(request):
     categorias = Categoria.objects.all()
     return render(request, 'categoria.html', {'categorias': categorias})
+
