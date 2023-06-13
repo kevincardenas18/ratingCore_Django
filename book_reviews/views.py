@@ -107,3 +107,24 @@ def lista_categorias(request):
     categorias = Categoria.objects.all()
     return render(request, 'categoria.html', {'categorias': categorias})
 
+@login_required
+def guardar_comentario(request, libro_id):
+    if request.method == 'POST':
+        comentario = request.POST['comentario']
+        libro = get_object_or_404(Libro, pk=libro_id)
+
+        # Verificar si el usuario ya ha dejado un comentario para este libro
+        existe_comentario = Review.objects.filter(libro=libro, usuario=request.user).exists()
+
+        if existe_comentario:
+            # El usuario ya ha dejado un comentario para este libro, mostrar mensaje de error
+            messages.error(request, 'Ya has dejado un comentario para este libro.')
+            return redirect('detalle_libro', libro_id=libro.id)
+
+        # Crear una nueva instancia de Review y guardarla en la base de datos
+        review = Review(comentario=comentario, usuario=request.user, libro=libro, valoracion=0)
+        review.save()
+
+        # Redirigir al usuario de vuelta a la página de detalles del libro
+        return redirect('detalle_libro', libro_id=libro.id)
+

@@ -11,6 +11,21 @@
 
 
     <h2>Comentarios</h2>
+    <h2>Escribir un comentario:</h2>
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <form method="post" action="{% url 'guardar_comentario' libro_id=libro.id %}">
+        {% csrf_token %}
+        <label for="comentario">Comentario:</label>
+        <textarea name="comentario" id="comentario" rows="4" cols="50"></textarea>
+        <button type="submit">Guardar Comentario</button>
+    </form>
     <ul>
         {% for comentario in comentarios %}
             <li>{{ comentario.comentario }} - {{ comentario.usuario.username }}</li>
