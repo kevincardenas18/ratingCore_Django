@@ -9,8 +9,7 @@ from .models import Libro, Autor, Categoria, Review
 
 # Create your views here.
 def home(request):
-    libros = Libro.objects.all()
-    return render(request, 'home.html', {'libros': libros})
+    return render(request, 'home.html')
 
 def singup(request):
 
@@ -88,9 +87,9 @@ def successfull(request):
 def administrador(request):
     return render(request, 'administrador.html')
 
-def autor(request):
-    autores = Autor.objects.all()
-    return render(request, 'autor.html', {'autores': autores})
+def libro(request):
+    libros = Libro.objects.all()
+    return render(request, 'libro.html', {'libros': libros})
 
 def detalle_libro(request, libro_id):
     libro = get_object_or_404(Libro, pk=libro_id)
@@ -98,6 +97,10 @@ def detalle_libro(request, libro_id):
     comentarios = Review.objects.filter(libro=libro)
 
     return render(request, 'detalle_libro.html', {'libro': libro, 'comentarios': comentarios})
+
+def autor(request):
+    autores = Autor.objects.all()
+    return render(request, 'autor.html', {'autores': autores})
 
 def detalle_autor(request, autor_id):
     autor = get_object_or_404(Autor, pk=autor_id)
@@ -128,3 +131,48 @@ def guardar_comentario(request, libro_id):
         # Redirigir al usuario de vuelta a la página de detalles del libro
         return redirect('detalle_libro', libro_id=libro.id)
 
+@login_required
+def guardar_valoracion(request, libro_id):
+    if request.method == 'POST':
+        valoracion = int(request.POST['valoracion'])
+        libro = get_object_or_404(Libro, pk=libro_id)
+        usuario = request.user
+
+        # Verificar si el usuario ya ha dejado una valoración para este libro
+        existe_valoracion = Review.objects.filter(libro=libro, usuario=usuario).exists()
+
+        if existe_valoracion:
+            # El usuario ya ha dejado una valoración para este libro, actualizar la valoración existente
+            review = Review.objects.get(libro=libro, usuario=usuario)
+            review.valoracion = valoracion
+            review.save()
+
+            # Actualizar la valoración promedio del libro
+            # valoraciones = Review.objects.filter(libro=libro)
+            # cantidad_valoraciones = valoraciones.count()
+            # suma_valoraciones = valoraciones.aggregate(Sum('valoracion'))['valoracion__sum']
+            # promedio_valoraciones = suma_valoraciones / cantidad_valoraciones
+            # libro.valoracion = round(promedio_valoraciones, 2)
+            # libro.save()
+
+            # Mostrar mensaje de éxito
+            messages.success(request, 'Se ha actualizado tu valoración.')
+
+        else:
+            # El usuario no ha dejado una valoración para este libro, crear una nueva valoración
+            review = Review(comentario='', usuario=usuario, libro=libro, valoracion=valoracion)
+            review.save()
+
+            # Actualizar la valoración promedio del libro
+            # valoraciones = Review.objects.filter(libro=libro)
+            # cantidad_valoraciones = valoraciones.count()
+            # suma_valoraciones = valoraciones.aggregate(Sum('valoracion'))['valoracion__sum']
+            # promedio_valoraciones = suma_valoraciones / cantidad_valoraciones
+            # libro.valoracion = round(promedio_valoraciones, 2)
+            # libro.save()
+
+            # Mostrar mensaje de éxito
+            messages.success(request, 'Tu valoración ha sido guardada.')
+
+        # Redirigir al usuario de vuelta a la página de detalles del libro
+        return redirect('detalle_libro', libro_id=libro.id)

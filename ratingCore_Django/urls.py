@@ -30,8 +30,10 @@ urlpatterns = [
     path('profile/deleteUser/<int:user_id>', views.deleteUser),
     path('administrador/', views.administrador, name = 'administrador'),
     path('autor/', views.autor, name='autor'),
+    path('libro', views.libro, name = 'libro'),
     path('libro/<int:libro_id>/', views.detalle_libro, name='detalle_libro'),
-    path('libros/<int:libro_id>/guardar_comentario/', views.guardar_comentario, name='guardar_comentario'),
+    path('libro/<int:libro_id>/guardar_comentario/', views.guardar_comentario, name='guardar_comentario'),
+    path('libro/<int:libro_id>/guardar_valoracion/', views.guardar_valoracion, name='guardar_valoracion'),
     path('autor/<int:autor_id>/', views.detalle_autor, name='detalle_autor'),
     path('categoria/', views.lista_categorias, name='lista_categorias'),
 ]
