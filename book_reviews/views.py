@@ -91,12 +91,23 @@ def libro(request):
     libros = Libro.objects.all()
     return render(request, 'libro.html', {'libros': libros})
 
+@login_required
 def detalle_libro(request, libro_id):
     libro = get_object_or_404(Libro, pk=libro_id)
 
+    # Obtener la instancia de Review del usuario actual para este libro
+    usuario = request.user
+    review_usuario = Review.objects.filter(libro=libro, usuario=usuario).first()
+
     comentarios = Review.objects.filter(libro=libro)
 
-    return render(request, 'detalle_libro.html', {'libro': libro, 'comentarios': comentarios})
+    context = {
+        'libro': libro,
+        'comentarios': comentarios,
+        'review_usuario': review_usuario,  # Pasa la instancia de Review del usuario actual al contexto
+    }
+
+    return render(request, 'detalle_libro.html', context)
 
 def autor(request):
     autores = Autor.objects.all()
@@ -109,27 +120,6 @@ def detalle_autor(request, autor_id):
 def lista_categorias(request):
     categorias = Categoria.objects.all()
     return render(request, 'categoria.html', {'categorias': categorias})
-
-@login_required
-def guardar_comentario(request, libro_id):
-    if request.method == 'POST':
-        comentario = request.POST['comentario']
-        libro = get_object_or_404(Libro, pk=libro_id)
-
-        # Verificar si el usuario ya ha dejado un comentario para este libro
-        existe_comentario = Review.objects.filter(libro=libro, usuario=request.user).exists()
-
-        if existe_comentario:
-            # El usuario ya ha dejado un comentario para este libro, mostrar mensaje de error
-            messages.error(request, 'Ya has dejado un comentario para este libro.')
-            return redirect('detalle_libro', libro_id=libro.id)
-
-        # Crear una nueva instancia de Review y guardarla en la base de datos
-        review = Review(comentario=comentario, usuario=request.user, libro=libro, valoracion=0)
-        review.save()
-
-        # Redirigir al usuario de vuelta a la página de detalles del libro
-        return redirect('detalle_libro', libro_id=libro.id)
 
 @login_required
 def guardar_valoracion(request, libro_id):
@@ -147,32 +137,71 @@ def guardar_valoracion(request, libro_id):
             review.valoracion = valoracion
             review.save()
 
-            # Actualizar la valoración promedio del libro
-            # valoraciones = Review.objects.filter(libro=libro)
-            # cantidad_valoraciones = valoraciones.count()
-            # suma_valoraciones = valoraciones.aggregate(Sum('valoracion'))['valoracion__sum']
-            # promedio_valoraciones = suma_valoraciones / cantidad_valoraciones
-            # libro.valoracion = round(promedio_valoraciones, 2)
-            # libro.save()
-
             # Mostrar mensaje de éxito
             messages.success(request, 'Se ha actualizado tu valoración.')
 
         else:
             # El usuario no ha dejado una valoración para este libro, crear una nueva valoración
-            review = Review(comentario='', usuario=usuario, libro=libro, valoracion=valoracion)
+            review = Review(usuario=usuario, libro=libro, valoracion=valoracion)
             review.save()
-
-            # Actualizar la valoración promedio del libro
-            # valoraciones = Review.objects.filter(libro=libro)
-            # cantidad_valoraciones = valoraciones.count()
-            # suma_valoraciones = valoraciones.aggregate(Sum('valoracion'))['valoracion__sum']
-            # promedio_valoraciones = suma_valoraciones / cantidad_valoraciones
-            # libro.valoracion = round(promedio_valoraciones, 2)
-            # libro.save()
 
             # Mostrar mensaje de éxito
             messages.success(request, 'Tu valoración ha sido guardada.')
 
         # Redirigir al usuario de vuelta a la página de detalles del libro
         return redirect('detalle_libro', libro_id=libro.id)
+
+@login_required
+def guardar_comentario(request, libro_id):
+    if request.method == 'POST':
+        comentario = request.POST['comentario'].strip()
+        libro = get_object_or_404(Libro, pk=libro_id)
+        usuario = request.user
+
+        # Verificar si el usuario ha dejado una valoración para este libro
+        existe_valoracion = Review.objects.filter(libro=libro, usuario=usuario).exists()
+
+        if not existe_valoracion:
+            # El usuario no ha dejado una valoración, mostrar mensaje de error
+            messages.error(request, 'Debes dejar una valoración antes de comentar.')
+            return redirect('detalle_libro', libro_id=libro.id)
+
+        if not comentario:
+            # El usuario no ha ingresado un comentario, mostrar mensaje de error
+            messages.error(request, 'Por favor, ingresa un comentario.')
+            return redirect('detalle_libro', libro_id=libro.id)
+
+        # Obtener la instancia de Review existente del usuario
+        review = get_object_or_404(Review, libro=libro, usuario=usuario)
+
+        # Actualizar el comentario de la instancia de Review
+        review.comentario = comentario
+        review.save()
+
+        # Mostrar mensaje de éxito
+        messages.success(request, 'Se ha ingresado el comentario.')
+
+        # Redirigir al usuario de vuelta a la página de detalles del libro
+        return redirect('detalle_libro', libro_id=libro.id)
+
+@login_required
+def eliminar_comentario(request, libro_id):
+    if request.method == 'POST':
+        comentario = request.POST['comentario'].strip()
+        libro = get_object_or_404(Libro, pk=libro_id)
+        usuario = request.user
+        review = get_object_or_404(Review, libro=libro, usuario=usuario)
+
+        # Verificar si el usuario tiene permiso para eliminar el comentario
+        if review.usuario == request.user:
+            # Actualizar el campo de comentario a null o none
+            review.comentario = None
+            review.save()
+
+            # Mostrar mensaje de éxito
+            messages.success(request, 'El comentario ha sido eliminado.')
+        else:
+            # El usuario no tiene permiso para eliminar el comentario
+            messages.error(request, 'No tienes permiso para eliminar este comentario.')
+
+    return redirect('detalle_libro', libro_id=review.libro.id)

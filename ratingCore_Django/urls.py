@@ -32,8 +32,9 @@ urlpatterns = [
     path('autor/', views.autor, name='autor'),
     path('libro', views.libro, name = 'libro'),
     path('libro/<int:libro_id>/', views.detalle_libro, name='detalle_libro'),
-    path('libro/<int:libro_id>/guardar_comentario/', views.guardar_comentario, name='guardar_comentario'),
     path('libro/<int:libro_id>/guardar_valoracion/', views.guardar_valoracion, name='guardar_valoracion'),
+    path('libro/<int:libro_id>/guardar_comentario/', views.guardar_comentario, name='guardar_comentario'),
+    path('libro/<int:libro_id>/eliminar_comentario/', views.eliminar_comentario, name='eliminar_comentario'),
     path('autor/<int:autor_id>/', views.detalle_autor, name='detalle_autor'),
     path('categoria/', views.lista_categorias, name='lista_categorias'),
 ]

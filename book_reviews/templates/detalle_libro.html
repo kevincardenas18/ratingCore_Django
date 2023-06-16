@@ -32,14 +32,15 @@
         <button type="submit">Guardar Valoración</button>
     </form>
     <h2>Comentarios</h2>
+    {% if not review_usuario.comentario %}
     <h2>Escribir un comentario:</h2>
-    {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
 
     <form method="post" action="{% url 'guardar_comentario' libro_id=libro.id %}">
         {% csrf_token %}
@@ -47,12 +48,76 @@
         <textarea name="comentario" id="comentario" rows="4" cols="50"></textarea>
         <button type="submit">Guardar Comentario</button>
     </form>
-    <ul>
+    {% endif %}
+    <!-- <ul>
         {% for comentario in comentarios %}
             <li>{{ comentario.comentario }} - {{ comentario.usuario.username }}</li>
         {% empty %}
             <li>No hay comentarios aún.</li>
         {% endfor %}
+    </ul> -->
+    <ul>
+        {% for comentario in comentarios %}
+    {% if comentario.usuario == request.user %}
+        {% if comentario.comentario %}
+            <div class="comentario">
+                <strong>Tu comentario:</strong><br>
+                <div id="comentario-field">
+                    {{ comentario.comentario }}
+                </div>
+                <div id="comentario-input" style="display: none;">
+                    <form action="{% url 'guardar_comentario' libro.id %}" method="POST">
+                        {% csrf_token %}
+                        <input type="text" name="comentario" value="{{ comentario.comentario }}">
+                        <button type="submit" id="guardar-comentario" style="display: none;">Guardar</button>
+                        <button type="button" id="eliminar-comentario" style="display: none;">Eliminar</button>
+                    </form>
+                    <form action="{% url 'guardar_comentario' libro.id %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" id="guardar-comentario" style="display: none;">Guardar</button>
+                        <button type="button" id="eliminar-comentario" style="display: none;">Eliminar</button>
+                    </form>
+                </div>
+                <button type="button" id="editar-comentario">Editar</button>
+            </div>
+        {% endif %}
+    {% else %}
+        {% if comentario.comentario %}
+            <div class="comentario">
+                <strong>{{ comentario.usuario }}:</strong><br>
+                {{ comentario.comentario }}
+            </div>
+        {% endif %}
+    {% endif %}
+{% endfor %}
+     
     </ul>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const comentarioField = document.getElementById('comentario-field');
+            const comentarioInput = document.getElementById('comentario-input');
+            const editarComentarioButton = document.getElementById('editar-comentario');
+            const guardarComentarioButton = document.getElementById('guardar-comentario');
+            const eliminarComentarioButton = document.getElementById('eliminar-comentario');
+    
+            editarComentarioButton.addEventListener('click', function() {
+                comentarioField.style.display = 'none';
+                comentarioInput.style.display = 'block';
+                editarComentarioButton.style.display = 'none';
+                guardarComentarioButton.style.display = 'inline-block';
+                eliminarComentarioButton.style.display = 'inline-block';
+            });
+
+            // Agregar el evento click al botón de eliminar
+            eliminarComentarioButton.addEventListener('click', function() {
+                // Enviar la solicitud POST para eliminar el comentario
+                var form = this.parentNode;  // Obtener el formulario padre
+                form.action = "{% url 'eliminar_comentario' libro_id=libro.id %}";  // Actualizar la acción del formulario con la URL de eliminación
+                form.submit();  // Enviar el formulario
+            });
+        });
+    </script>
+    
 
 {% endblock %}
