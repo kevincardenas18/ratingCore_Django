@@ -49,48 +49,36 @@
         <button type="submit">Guardar Comentario</button>
     </form>
     {% endif %}
-    <!-- <ul>
-        {% for comentario in comentarios %}
-            <li>{{ comentario.comentario }} - {{ comentario.usuario.username }}</li>
-        {% empty %}
-            <li>No hay comentarios aún.</li>
-        {% endfor %}
-    </ul> -->
+
     <ul>
         {% for comentario in comentarios %}
-    {% if comentario.usuario == request.user %}
-        {% if comentario.comentario %}
-            <div class="comentario">
-                <strong>Tu comentario:</strong><br>
-                <div id="comentario-field">
-                    {{ comentario.comentario }}
+        {% if comentario.usuario == request.user %}
+            {% if comentario.comentario %}
+                <div class="comentario">
+                    <strong>Tu comentario:</strong><br>
+                    <div id="comentario-field">
+                        {{ comentario.comentario }}
+                    </div>
+                    <div id="comentario-input" style="display: none;">
+                        <form id="editar-comentario-form" method="POST">
+                            {% csrf_token %}
+                            <input type="text" name="comentario" value="{{ comentario.comentario }}">
+                            <button type="submit" id="guardar-comentario" style="display: none;">Guardar</button>
+                            <button type="button" id="eliminar-comentario" style="display: none;">Eliminar</button>
+                        </form>
+                    </div>
+                    <button type="button" id="editar-comentario">Editar</button>
                 </div>
-                <div id="comentario-input" style="display: none;">
-                    <form action="{% url 'guardar_comentario' libro.id %}" method="POST">
-                        {% csrf_token %}
-                        <input type="text" name="comentario" value="{{ comentario.comentario }}">
-                        <button type="submit" id="guardar-comentario" style="display: none;">Guardar</button>
-                        <button type="button" id="eliminar-comentario" style="display: none;">Eliminar</button>
-                    </form>
-                    <form action="{% url 'guardar_comentario' libro.id %}" method="POST">
-                        {% csrf_token %}
-                        <button type="submit" id="guardar-comentario" style="display: none;">Guardar</button>
-                        <button type="button" id="eliminar-comentario" style="display: none;">Eliminar</button>
-                    </form>
-                </div>
-                <button type="button" id="editar-comentario">Editar</button>
-            </div>
-        {% endif %}
-    {% else %}
+            {% endif %}
+        {% else %}
         {% if comentario.comentario %}
             <div class="comentario">
                 <strong>{{ comentario.usuario }}:</strong><br>
                 {{ comentario.comentario }}
             </div>
         {% endif %}
-    {% endif %}
-{% endfor %}
-     
+        {% endif %}
+        {% endfor %} 
     </ul>
 
     <script>
@@ -108,13 +96,17 @@
                 guardarComentarioButton.style.display = 'inline-block';
                 eliminarComentarioButton.style.display = 'inline-block';
             });
-
-            // Agregar el evento click al botón de eliminar
+    
+            guardarComentarioButton.addEventListener('click', function() {
+                const form = document.getElementById('editar-comentario-form');
+                form.action = "{% url 'guardar_comentario' libro.id %}";
+                form.submit();
+            });
+    
             eliminarComentarioButton.addEventListener('click', function() {
-                // Enviar la solicitud POST para eliminar el comentario
-                var form = this.parentNode;  // Obtener el formulario padre
-                form.action = "{% url 'eliminar_comentario' libro_id=libro.id %}";  // Actualizar la acción del formulario con la URL de eliminación
-                form.submit();  // Enviar el formulario
+                const form = document.getElementById('editar-comentario-form');
+                form.action = "{% url 'eliminar_comentario' libro_id=libro.id %}";
+                form.submit();
             });
         });
     </script>
