@@ -6,6 +6,8 @@ from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from .models import Libro, Autor, Categoria, Review
+from django.db.models import Avg
+
 
 # Create your views here.
 def home(request):
@@ -148,6 +150,9 @@ def guardar_valoracion(request, libro_id):
             # Mostrar mensaje de éxito
             messages.success(request, 'Tu valoración ha sido guardada.')
 
+        #calcular_promedio_valoraciones(libro)  # Calcular y actualizar el promedio de valoraciones
+        valoraciones_libro(libro)
+
         # Redirigir al usuario de vuelta a la página de detalles del libro
         return redirect('detalle_libro', libro_id=libro.id)
 
@@ -205,3 +210,24 @@ def eliminar_comentario(request, libro_id):
             messages.error(request, 'No tienes permiso para eliminar este comentario.')
 
     return redirect('detalle_libro', libro_id=review.libro.id)
+
+
+def calcular_promedio_valoraciones(libro):
+    promedio = Review.objects.filter(libro=libro).aggregate(promedio=Avg('valoracion'))['promedio']
+    libro.valoracion = promedio or 0.00
+    libro.save()
+
+def valoraciones_libro(libro):
+    reviews = Review.objects.filter(libro=libro)
+
+    suma = 0
+    cantidad_registros = 0
+
+    for review in reviews:
+        suma += review.valoracion
+        cantidad_registros += 1
+
+    promedio = suma / cantidad_registros if cantidad_registros > 0 else 0
+
+    libro.valoracion = promedio
+    libro.save()
