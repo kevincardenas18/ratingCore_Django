@@ -4,7 +4,7 @@
 
 {% block content %}
 {% if user.is_superuser %}
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newCategoria">Agregar</button>
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newCategoria" id="agregar-btn">Agregar</button>
 
 <div class="modal fade" id="newCategoria" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -19,6 +19,11 @@
           <div class="mb-3">
             <label for="categoria-name" class="col-form-label">Nombre Categoría:</label>
             <input type="text" class="form-control" id="categoria-name" name="categoria-name">
+            {% if error %}
+            <div class="alert alert-danger" role="alert" id="error-alert">
+              {{ error }}
+            </div>
+            {% endif %}
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
@@ -38,5 +43,9 @@
       <li>{{ categoria.nombre }}</li>
     {% endfor %}
   </ul>
+ 
+
+  {% load static %}
+  <script src="{% static 'js/snippets.js' %}"></script>
 
 {% endblock %}

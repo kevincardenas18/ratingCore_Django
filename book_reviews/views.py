@@ -7,6 +7,10 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from .models import Libro, Autor, Categoria, Review
 from django.db.models import Avg
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from django.core.exceptions import ObjectDoesNotExist
+
 
 
 # Create your views here.
@@ -124,10 +128,19 @@ def lista_categorias(request):
     return render(request, 'categoria.html', {'categorias': categorias})
 
 def agregar_categoria(request):
+    error = None   
     if request.method == 'POST':
         nombre_categoria = request.POST.get('categoria-name')
-        Categoria.objects.create(nombre=nombre_categoria)
-    return redirect('lista_categorias')
+        
+        try:
+            Categoria.objects.create(nombre=nombre_categoria)
+            return redirect('lista_categorias')
+        except IntegrityError:
+            error = 'Ya existe una categoría con ese nombre.'
+    
+    categorias = Categoria.objects.all()
+    
+    return render(request, 'categoria.html', {'categorias': categorias, 'error_present': error is not None, 'error': error})
 
 @login_required
 def guardar_valoracion(request, libro_id):
@@ -161,6 +174,21 @@ def guardar_valoracion(request, libro_id):
 
         # Redirigir al usuario de vuelta a la página de detalles del libro
         return redirect('detalle_libro', libro_id=libro.id)
+
+ 
+   
+@require_POST
+@login_required
+def verificar_categoria(request):
+    categoria_name = request.POST.get('categoria-name')
+
+    try:
+        Categoria.objects.get(nombre=categoria_name)
+        exists = True
+    except ObjectDoesNotExist:
+        exists = False
+
+    return JsonResponse({'exists': exists})
 
 @login_required
 def guardar_comentario(request, libro_id):

@@ -1,18 +1,11 @@
-const exampleModal = document.getElementById('exampleModal')
-if (exampleModal) {
-  exampleModal.addEventListener('show.bs.modal', event => {
-    // Button that triggered the modal
-    const button = event.relatedTarget
-    // Extract info from data-bs-* attributes
-    const recipient = button.getAttribute('data-bs-whatever')
-    // If necessary, you could initiate an Ajax request here
-    // and then do the updating in a callback.
-
-    // Update the modal's content.
-    const modalTitle = exampleModal.querySelector('.modal-title')
-    const modalBodyInput = exampleModal.querySelector('.modal-body input')
-
-    modalTitle.textContent = `Nueva Categoria ${recipient}`
-    modalBodyInput.value = recipient
-  })
-}
+// Espera a que el documento esté completamente cargado
+document.addEventListener('DOMContentLoaded', function() {
+  // Verifica si el mensaje de error está presente en el modal
+  var errorAlert = document.getElementById('error-alert');
+  
+  // Si el mensaje de error está presente, muestra el modal
+  if (errorAlert) {
+    var modal = new bootstrap.Modal(document.getElementById('newCategoria'));
+    modal.show();
+  }
+});

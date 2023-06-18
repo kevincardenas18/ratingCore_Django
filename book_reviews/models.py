@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Categoria(models.Model):
-    nombre = models.CharField(max_length=100)
+    nombre = models.CharField(unique=True, max_length=100)
     
     def __str__(self):
         return str(self.nombre)
@@ -36,4 +36,4 @@ class Review(models.Model):
     valoracion = models.IntegerField(null=True) # Campo de valoración del usuario para el libro
 
     def __str__(self):
-        return str(self.comentario)
+        return str(self.usuario)
