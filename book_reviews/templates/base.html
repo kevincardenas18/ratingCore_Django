@@ -30,12 +30,14 @@
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      Categorias
+                      Categorías
                     </a>
                     <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/categoria">Todas las categorías</a></li>
+                        <li><hr class="dropdown-divider"></li>
                         {% for categoria in categorias %}
-                <li><a class="dropdown-item" href="#">{{ categoria.nombre }}</a></li>
-                {% endfor %}
+                        <li><a class="dropdown-item" href="#">{{ categoria.nombre }}</a></li>
+                        {% endfor %}
                     </ul>
                 </li>
             </ul> 

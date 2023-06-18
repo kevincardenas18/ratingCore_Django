@@ -37,4 +37,5 @@ urlpatterns = [
     path('libro/<int:libro_id>/eliminar_comentario/', views.eliminar_comentario, name='eliminar_comentario'),
     path('autor/<int:autor_id>/', views.detalle_autor, name='detalle_autor'),
     path('categoria/', views.lista_categorias, name='lista_categorias'),
+    path('categorias/agregar/', views.agregar_categoria, name='agregar_categoria'),
 ]

@@ -123,6 +123,12 @@ def lista_categorias(request):
     categorias = Categoria.objects.all()
     return render(request, 'categoria.html', {'categorias': categorias})
 
+def agregar_categoria(request):
+    if request.method == 'POST':
+        nombre_categoria = request.POST.get('categoria-name')
+        Categoria.objects.create(nombre=nombre_categoria)
+    return redirect('lista_categorias')
+
 @login_required
 def guardar_valoracion(request, libro_id):
     if request.method == 'POST':
