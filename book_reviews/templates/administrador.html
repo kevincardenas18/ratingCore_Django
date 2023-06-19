@@ -3,212 +3,94 @@
 {% block title %} Administrador {% endblock %}
 
 {% block content %}
-
+{% load static %}
+  <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+  <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+  <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
 <!-- Container -->
-<div id="container">
+<body class=" dashboard">
 
-    
-    <!-- Header -->
-    
-    <div id="header">
-        <div id="branding">
-        
-<h1 id="site-name"><a href="/administrador/">Administración de Django</a></h1>
-
-
-        </div>
-        
-        
+  <div id="container">
+      <!-- Header -->
+      <div id="header">
+        <div id="branding">  
+          <h1 id="site-name"><a href="/administrador/">Administración de Django</a></h1>
+        </div>   
         <div id="user-tools">
-            
-                Bienvenidos,
-                <strong>admin</strong>.
-            
-            
-                
-                    <a href="/">Ver el sitio</a> /
-                
-                
-                    
-                    
-                
-                
-                <a href="/admin/password_change/">Cambiar contraseña</a> /
-                
-                <form id="logout-form" method="post" action="/admin/logout/">
-                    <input type="hidden" name="csrfmiddlewaretoken" value="agJ5HQQqziN9zqvwD7u8TNhT1WAHzCPjuALmxUo92tCYncGFxA5qIhEJf7eb5fJz">
-                    <button type="submit">Cerrar sesión</button>
-                </form>
-                
-<button class="theme-toggle">
-  <div class="visually-hidden theme-label-when-auto">Cambiar tema (tema actual: automático)</div>
-  <div class="visually-hidden theme-label-when-light">Cambiar tema (tema actual: claro)</div>
-  <div class="visually-hidden theme-label-when-dark">Cambiar tema (tema actual: oscuro)</div>
-  <svg aria-hidden="true" class="theme-icon-when-auto">
-    <use xlink:href="#icon-auto" />
-  </svg>
-  <svg aria-hidden="true" class="theme-icon-when-dark">
-    <use xlink:href="#icon-moon" />
-  </svg>
-  <svg aria-hidden="true" class="theme-icon-when-light">
-    <use xlink:href="#icon-sun" />
-  </svg>
-</button>
-
-            
-        </div>
-        
-        
-        
-    </div>
-    
-    <!-- END Header -->
-    
-    
-
-    <div class="main" id="main">
-      
-        
-      
-      <div id="content-start" class="content" tabindex="-1">
-        
-          
-        
-        <!-- Content -->
-        <div id="content" class="colMS">
-          
-          <h1>Sitio administrativo</h1>
-          
-          
-<div id="content-main">
-  
-
-
-  
-    <div class="app-auth module">
-      <table>
-        <caption>
-          <a href="/admin/auth/" class="section" title="Modelos en la aplicación Autenticación y autorización">Autenticación y autorización</a>
-        </caption>
-        
-          <tr class="model-group">
-            
-              <th scope="row"><a href="/admin/auth/group/">Grupos</a></th>
-            
-
-            
-              <td><a href="/admin/auth/group/add/" class="addlink">Añadir</a></td>
-            
-
-            
-              
-                <td><a href="/admin/auth/group/" class="changelink">Modificar</a></td>
-              
-            
-          </tr>
-        
-          <tr class="model-user">
-            
-              <th scope="row"><a href="/admin/auth/user/">Usuarios</a></th>
-            
-
-            
-              <td><a href="/admin/auth/user/add/" class="addlink">Añadir</a></td>
-            
-
-            
-              
-                <td><a href="/admin/auth/user/" class="changelink">Modificar</a></td>
-              
-            
-          </tr>
-        
-      </table>
-    </div>
-  
-    <div class="app-book_reviews module">
-      <table>
-        <caption>
-          <a href="/admin/book_reviews/" class="section" title="Modelos en la aplicación Book_Reviews">Book_Reviews</a>
-        </caption>
-        
-          <tr class="model-autor">
-            
-              <th scope="row"><a href="/admin/book_reviews/autor/">Autors</a></th>
-            
-
-            
-              <td><a href="/admin/book_reviews/autor/add/" class="addlink">Añadir</a></td>
-            
-
-            
-              
-                <td><a href="/admin/book_reviews/autor/" class="changelink">Modificar</a></td>
-              
-            
-          </tr>
-        
-          <tr class="model-categoria">
-            
-              <th scope="row"><a href="/admin/book_reviews/categoria/">Categorias</a></th>
-            
-
-            
-              <td><a href="/admin/book_reviews/categoria/add/" class="addlink">Añadir</a></td>
-            
-
-            
-              
-                <td><a href="/admin/book_reviews/categoria/" class="changelink">Modificar</a></td>
-              
-            
-          </tr>
-        
-          <tr class="model-libro">
-            
-              <th scope="row"><a href="/admin/book_reviews/libro/">Libros</a></th>
-            
-
-            
-              <td><a href="/admin/book_reviews/libro/add/" class="addlink">Añadir</a></td>
-            
-
-            
-              
-                <td><a href="/admin/book_reviews/libro/" class="changelink">Modificar</a></td>
-              
-            
-          </tr>
-        
-          <tr class="model-review">
-            
-              <th scope="row"><a href="/admin/book_reviews/review/">Reviews</a></th>
-            
-
-            
-              <td><a href="/admin/book_reviews/review/add/" class="addlink">Añadir</a></td>
-            
-
-            
-              
-                <td><a href="/admin/book_reviews/review/" class="changelink">Modificar</a></td>
-              
-            
-          </tr>
-        
-      </table>
-    </div>
-  
-
-
-</div>
-          <br class="clear">
-        </div>
-        <!-- END Content -->
-        <div id="footer"></div>
+          Bienvenido, <strong>admin</strong>.
+          <a href="/">Ver el sitio</a>   
+        </div>  
       </div>
+      <!-- END Header -->
+
+      <div class="main" id="main">
+        <div id="content-start" class="content" tabindex="-1">
+          <!-- Content -->
+          <div id="content" class="colMS">
+            <h1>Sitio administrativo</h1>
+            
+            <div id="content-main">
+
+              <div class="app-auth module">
+                <table>
+                  <caption>
+                    <a href="/admin/auth/" class="section" title="Modelos en la aplicación Autenticación y autorización">Autenticación y autorización</a>
+                  </caption>
+                  <tr class="model-user">
+                    <th scope="row"><a href="/admin/auth/user/">Usuarios</a></th>
+                    <td><a href="/admin/auth/user/add/" class="addlink">Añadir</a></td>
+                    <td><a href="/admin/auth/user/" class="changelink">Modificar</a></td>
+                  </tr> 
+                </table>
+              </div>
+    
+              <div class="app-book_reviews module">
+                <table>
+                  <caption>
+                    <a href="/admin/book_reviews/" class="section" title="Modelos en la aplicación Book_Reviews">Book_Reviews</a>
+                  </caption>
+                  
+                  <tr class="model-autor">
+                    <th scope="row"><a href="/admin/book_reviews/autor/">Autors</a></th>
+                    <td><a href="/admin/book_reviews/autor/add/" class="addlink">Añadir</a></td>
+                    <td><a href="/admin/book_reviews/autor/" class="changelink">Modificar</a></td>
+                  </tr>
+
+                  <tr class="model-categoria">
+                    <th scope="row"><a href="/admin/book_reviews/categoria/">Categorias</a></th>
+                    <td><a href="/admin/book_reviews/categoria/add/" class="addlink">Añadir</a></td>
+                    <td><a href="/admin/book_reviews/categoria/" class="changelink">Modificar</a></td>
+                  </tr>
+                  
+                  <tr class="model-libro">
+                    <th scope="row"><a href="/admin/book_reviews/libro/">Libros</a></th>
+                    <td><a href="/admin/book_reviews/libro/add/" class="addlink">Añadir</a></td>
+                    <td><a href="/admin/book_reviews/libro/" class="changelink">Modificar</a></td>
+                  </tr>
+                  
+                  <tr class="model-review">
+                    <th scope="row"><a href="/admin/book_reviews/review/">Reviews</a></th>
+                    <td><a href="/admin/book_reviews/review/add/" class="addlink">Añadir</a></td>
+                    <td><a href="/admin/book_reviews/review/" class="changelink">Modificar</a></td>
+                  </tr>
+                </table>
+              </div>
+
+            </div>
+
+            <br class="clear">
+
+          </div>
+          <!-- END Content -->
+
+        <div id="footer"></div>
+
+      </div>
+
     </div>
-</div>
-<!-- END Container -->
+  </div>
+
 </body>
+<!-- END Container -->
 {% endblock %}

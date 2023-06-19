@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 
 {% block title %} Autores {% endblock %}
-
+{% load static %}
+    <link rel="stylesheet" href="{% static 'css/admin.css' %}">
 {% block content %}
 
 {% for autor in autores %}

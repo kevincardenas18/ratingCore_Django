@@ -175,21 +175,6 @@ def guardar_valoracion(request, libro_id):
         # Redirigir al usuario de vuelta a la página de detalles del libro
         return redirect('detalle_libro', libro_id=libro.id)
 
- 
-   
-@require_POST
-@login_required
-def verificar_categoria(request):
-    categoria_name = request.POST.get('categoria-name')
-
-    try:
-        Categoria.objects.get(nombre=categoria_name)
-        exists = True
-    except ObjectDoesNotExist:
-        exists = False
-
-    return JsonResponse({'exists': exists})
-
 @login_required
 def guardar_comentario(request, libro_id):
     if request.method == 'POST':
