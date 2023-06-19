@@ -38,7 +38,6 @@
       </h2>
       <p>Autor: <a href="{% url 'detalle_autor' autor_id=libro.autor.id %}">{{ libro.autor.nombre }}</a></p>
       <p>Categorías: {{ libro.categorias.all|join:", " }}</p>
-      <p>Categoria: {{ libro.categorias.nombre }}</a></p>
       <p>Descripción: {{ libro.resumen }}</p>
       <p>Valoración: {{ libro.valoracion }}</p>
     </div>

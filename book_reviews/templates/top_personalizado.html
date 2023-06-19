@@ -5,17 +5,19 @@
 {% block content %}
 <h2>Top Personalizado</h2>
 
-{% if libros_top %}
+{% if user.is_authenticated %}
+    <h3>Score 1: {{ score_1 }}</h3>
+    <h3>Score 2: {{ score_2 }}</h3>
     <h3>Categoría 1: {{ categoria_1 }}</h3>
     <ul>
-        {% for libro in libros_top %}
+        {% for libro in libros_1 %}
             <li>{{ libro.titulo }} - Valoración: {{ libro.valoracion }}</li>
         {% endfor %}
     </ul>
 
     <h3>Categoría 2: {{ categoria_2 }}</h3>
     <ul>
-        {% for libro in libros_top %}
+        {% for libro in libros_2 %}
             <li>{{ libro.titulo }} - Valoración: {{ libro.valoracion }}</li>
         {% endfor %}
     </ul>

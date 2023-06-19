@@ -248,11 +248,10 @@ def valoraciones_libro(libro):
     libro.valoracion = promedio
     libro.save()
 
-
 def top_personalizado(request):
     if not request.user.is_authenticated or not Review.objects.filter(usuario=request.user).exists():
         # Usuario no logueado o sin reviews ingresadas, mostrar top 10
-        libros_top = Libro.objects.order_by('-valoracion')[:10]
+        libros_top = Libro.objects.annotate(num_comentarios=Count('review')).order_by('-valoracion', '-num_comentarios')[:3]
     else:
         categorias = Categoria.objects.all()
         score_1 = 0
@@ -269,16 +268,38 @@ def top_personalizado(request):
 
                 if score_categoria > score_1:
                     score_2 = score_1
-                    categoria_2 = categoria.nombre
+                    categoria_2 = categoria_1
                     score_1 = score_categoria
                     categoria_1 = categoria.nombre
                 elif score_categoria > score_2:
                     score_2 = score_categoria
                     categoria_2 = categoria.nombre
+        
+        '''
+        for categoria in categorias:
+            suma = 0
+            cantidad_review = Review.objects.filter(usuario=request.user, libro__categorias=categoria).count()
+
+            if cantidad_review > 0:
+                for review in Review.objects.filter(libro__categorias=categoria):
+                    if review.usuario == request.user :
+                        suma += review.valoracion
+
+                score_categoria = suma / cantidad_review
+
+                if score_categoria > score_1:
+                    score_2 = score_1
+                    categoria_2 = categoria_1
+                    score_1 = score_categoria
+                    categoria_1 = categoria.nombre
+                elif score_categoria > score_2:
+                    score_2 = score_categoria
+                    categoria_2 = categoria.nombre
+        '''
 
         libros_1 = Libro.objects.filter(categorias__nombre=categoria_1).exclude(review__usuario=request.user).order_by('-valoracion')[:3]
         libros_2 = Libro.objects.filter(categorias__nombre=categoria_2).exclude(review__usuario=request.user).order_by('-valoracion')[:3]
 
         libros_top = libros_1 | libros_2
 
-    return render(request, 'top_personalizado.html', {'libros_top': libros_top})
+    return render(request, 'top_personalizado.html', {'libros_top': libros_top, 'score_1': score_1, 'score_2': score_2, 'categoria_1': categoria_1, 'categoria_2': categoria_2, 'libros_1': libros_1, 'libros_2': libros_2})
