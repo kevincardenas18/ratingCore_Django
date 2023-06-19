@@ -3,5 +3,10 @@
 {% block title %} Home {% endblock %}
 
 {% block content %}
-<h1>Home</h1>
+<h2>Top 10 de Libros</h2>
+<ul>
+  {% for libro in libros %}
+  <li>{{ libro.titulo }} - Valoración: {{ libro.valoracion }} - Comentarios: {{ libro.num_comentarios }}</li>
+  {% endfor %}
+</ul>
 {% endblock %}

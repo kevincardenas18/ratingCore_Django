@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %} Home {% endblock %}
+
+{% block content %}
+<h2>Top Personalizado</h2>
+
+{% if libros_top %}
+    <h3>Categoría 1: {{ categoria_1 }}</h3>
+    <ul>
+        {% for libro in libros_top %}
+            <li>{{ libro.titulo }} - Valoración: {{ libro.valoracion }}</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Categoría 2: {{ categoria_2 }}</h3>
+    <ul>
+        {% for libro in libros_top %}
+            <li>{{ libro.titulo }} - Valoración: {{ libro.valoracion }}</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No se encontraron libros en el top personalizado.</p>
+{% endif %}
+{% endblock %}

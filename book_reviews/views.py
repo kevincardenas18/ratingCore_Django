@@ -6,16 +6,13 @@ from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from .models import Libro, Autor, Categoria, Review
-from django.db.models import Avg
-from django.http import JsonResponse
-from django.views.decorators.http import require_POST
-from django.core.exceptions import ObjectDoesNotExist
-
+from django.db.models import Avg, Count, Sum
 
 
 # Create your views here.
 def home(request):
-    return render(request, 'home.html')
+    libros = Libro.objects.annotate(num_comentarios=Count('review')).order_by('-valoracion', '-num_comentarios')[:3]
+    return render(request, 'home.html', {'libros': libros})
 
 def singup(request):
 
@@ -250,3 +247,38 @@ def valoraciones_libro(libro):
 
     libro.valoracion = promedio
     libro.save()
+
+
+def top_personalizado(request):
+    if not request.user.is_authenticated or not Review.objects.filter(usuario=request.user).exists():
+        # Usuario no logueado o sin reviews ingresadas, mostrar top 10
+        libros_top = Libro.objects.order_by('-valoracion')[:10]
+    else:
+        categorias = Categoria.objects.all()
+        score_1 = 0
+        score_2 = 0
+        categoria_1 = None
+        categoria_2 = None
+
+        for categoria in categorias:
+            suma = Review.objects.filter(usuario=request.user, libro__categorias=categoria).aggregate(Sum('valoracion')).get('valoracion__sum', 0)
+            cantidad_review = Review.objects.filter(usuario=request.user, libro__categorias=categoria).count()
+
+            if cantidad_review > 0:
+                score_categoria = suma / cantidad_review
+
+                if score_categoria > score_1:
+                    score_2 = score_1
+                    categoria_2 = categoria.nombre
+                    score_1 = score_categoria
+                    categoria_1 = categoria.nombre
+                elif score_categoria > score_2:
+                    score_2 = score_categoria
+                    categoria_2 = categoria.nombre
+
+        libros_1 = Libro.objects.filter(categorias__nombre=categoria_1).exclude(review__usuario=request.user).order_by('-valoracion')[:3]
+        libros_2 = Libro.objects.filter(categorias__nombre=categoria_2).exclude(review__usuario=request.user).order_by('-valoracion')[:3]
+
+        libros_top = libros_1 | libros_2
+
+    return render(request, 'top_personalizado.html', {'libros_top': libros_top})

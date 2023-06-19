@@ -38,5 +38,6 @@ urlpatterns = [
     path('autor/<int:autor_id>/', views.detalle_autor, name='detalle_autor'),
     path('categoria/', views.lista_categorias, name='lista_categorias'),
     path('categorias/agregar/', views.agregar_categoria, name='agregar_categoria'),
+    path('personalizado/', views.top_personalizado, name='top_personalizado'),
 ]
 
