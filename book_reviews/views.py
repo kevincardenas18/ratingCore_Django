@@ -258,7 +258,7 @@ def top_personalizado(request):
         score_2 = 0
         categoria_1 = None
         categoria_2 = None
-
+        
         for categoria in categorias:
             suma = Review.objects.filter(usuario=request.user, libro__categorias=categoria).aggregate(Sum('valoracion')).get('valoracion__sum', 0)
             cantidad_review = Review.objects.filter(usuario=request.user, libro__categorias=categoria).count()
@@ -279,10 +279,13 @@ def top_personalizado(request):
         for categoria in categorias:
             suma = 0
             cantidad_review = Review.objects.filter(usuario=request.user, libro__categorias=categoria).count()
-
+            print('La categoria es: ' + categoria.nombre)
             if cantidad_review > 0:
                 for review in Review.objects.filter(libro__categorias=categoria):
                     if review.usuario == request.user :
+                        #categorias_lista = review.libro.categorias.values_list('nombre', flat=True)
+                        #categorias_str = ', '.join(categorias_lista)
+                        #print(categorias_str)
                         suma += review.valoracion
 
                 score_categoria = suma / cantidad_review
