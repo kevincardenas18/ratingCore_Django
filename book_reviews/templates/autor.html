@@ -2,7 +2,9 @@
 
 {% block title %} Autores {% endblock %}
 {% load static %}
-    <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+    <link rel="stylesheet" href="{% static 'css/autor.css' %}">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 {% block content %}
 
 {% for autor in autores %}
@@ -20,7 +22,17 @@
       </h2>
       <p>País: {{ autor.pais }}</p>
       <p>Fecha de nacimiento: {{ autor.fecha_nacimiento }}</p>
-      <p>Biografía: {{ autor.resumen }}</p>
+      <!-- <p>Biografía: {{ autor.resumen }}</p> -->
+      <p>
+        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+          Biografía
+        </button>
+      </p>
+      <div class="collapse" id="collapseExample">
+        <div class="card card-body">
+          {{ autor.resumen }}
+        </div>
+      </div>
     </div>
   </div>
 {% endfor %}

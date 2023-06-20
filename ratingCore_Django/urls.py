@@ -39,5 +39,6 @@ urlpatterns = [
     path('categoria/', views.lista_categorias, name='lista_categorias'),
     path('categorias/agregar/', views.agregar_categoria, name='agregar_categoria'),
     path('personalizado/', views.top_personalizado, name='top_personalizado'),
+    path('personalizado/calcular_compatibilidad', views.calcular_compatibilidad, name='calcular_compatibilidad'),
 ]
 

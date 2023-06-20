@@ -3,7 +3,7 @@
 {% block title %} Libros {% endblock %}
 
 {% block content %}
-<main class="container py-5">
+<!-- <main class="container py-5">
     <section class="card card-body">
         <h1>Gestion de Usuarios Django</h1>
         <div class="text-center">
@@ -22,7 +22,7 @@
         </div>
         
     </section>
-</main>
+</main> -->
 {% for libro in libros %}
   <div class="libro">
     <div class="imagen">
@@ -37,7 +37,7 @@
         </a>
       </h2>
       <p>Autor: <a href="{% url 'detalle_autor' autor_id=libro.autor.id %}">{{ libro.autor.nombre }}</a></p>
-      <p>Categorías: {{ libro.categorias.all|join:", " }}</p>
+      <p>Categoría: {{ libro.categorias.all|join:", " }}</p>
       <p>Descripción: {{ libro.resumen }}</p>
       <p>Valoración: {{ libro.valoracion }}</p>
     </div>

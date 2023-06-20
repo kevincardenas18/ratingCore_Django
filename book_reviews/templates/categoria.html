@@ -4,7 +4,7 @@
 
 {% block content %}
 {% if user.is_superuser %}
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newCategoria" id="agregar-btn">Agregar</button>
+
 
 <div class="modal fade" id="newCategoria" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -37,7 +37,9 @@
 {% endif %}
 
 <h1>Lista de Categorías</h1>
-  
+{% if user.is_superuser %}
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newCategoria" id="agregar-btn">Agregar</button>
+{% endif %}
   <ul>
     {% for categoria in categorias %}
       <li>{{ categoria.nombre }}</li>

@@ -3,25 +3,33 @@
 {% block title %} Home {% endblock %}
 
 {% block content %}
-<h2>Top Personalizado</h2>
+<h2>Compatibilidad de Usuarios:</h2>
+<ul>
+  {% for usuario, compatibilidad in resultados %}
+    <li>{{ usuario }} - {{ compatibilidad }}</li>
+  {% endfor %}
+</ul>
 
-{% if user.is_authenticated %}
-    <h3>Score 1: {{ score_1 }}</h3>
-    <h3>Score 2: {{ score_2 }}</h3>
-    <h3>Categoría 1: {{ categoria_1 }}</h3>
-    <ul>
-        {% for libro in libros_1 %}
-            <li>{{ libro.titulo }} - Valoración: {{ libro.valoracion }}</li>
-        {% endfor %}
-    </ul>
 
-    <h3>Categoría 2: {{ categoria_2 }}</h3>
-    <ul>
-        {% for libro in libros_2 %}
-            <li>{{ libro.titulo }} - Valoración: {{ libro.valoracion }}</li>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>No se encontraron libros en el top personalizado.</p>
-{% endif %}
+{% for libro in libros_top %}
+<div class="libro">
+  <div class="imagen">
+    <a href="{% url 'detalle_libro' libro_id=libro.id %}">
+      <img src="{{ libro.imagen }}" alt="{{ libro.titulo }}">
+    </a>
+  </div>
+  <div class="detalles">
+    <h2>
+      <a href="{% url 'detalle_libro' libro_id=libro.id %}">
+        {{ libro.titulo }}
+      </a>
+    </h2>
+    <p>Autor: <a href="{% url 'detalle_autor' autor_id=libro.autor.id %}">{{ libro.autor.nombre }}</a></p>
+    <p>Categorías: {{ libro.categorias.all|join:", " }}</p>
+    <p>Descripción: {{ libro.resumen }}</p>
+    <p>Valoración: {{ libro.valoracion }}</p>
+  </div>
+</div>
+{% endfor %}
+
 {% endblock %}

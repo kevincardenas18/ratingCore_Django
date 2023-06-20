@@ -248,9 +248,200 @@ def valoraciones_libro(libro):
     libro.valoracion = promedio
     libro.save()
 
+
+def calcular_compatibilidad(usuario, categoria_1, categoria_2, usuario_categoria_1, usuario_categoria_2):
+    
+    compatibilidad = 0.0
+    if categoria_1 == usuario_categoria_1 and categoria_2 == usuario_categoria_2:
+        compatibilidad = 100.0
+        print(compatibilidad)
+        print(categoria_1, categoria_2, usuario_categoria_1, usuario_categoria_2)
+    elif categoria_1 == usuario_categoria_2 and categoria_2 == usuario_categoria_1:
+        compatibilidad = 100.0
+        print(compatibilidad)
+        print(categoria_1, categoria_2, usuario_categoria_1, usuario_categoria_2)
+    elif categoria_1 == usuario_categoria_1 or categoria_2 == usuario_categoria_2:
+        compatibilidad = 50.0
+        print(compatibilidad)
+        print(categoria_1, categoria_2, usuario_categoria_1, usuario_categoria_2)
+        #print(categoria_1, categoria_2, usuario_categoria_1, usuario_categoria_2)
+    elif categoria_1 == usuario_categoria_2 or categoria_2 == usuario_categoria_1:
+        compatibilidad = 50.0
+        print(compatibilidad)
+        print(categoria_1, categoria_2, usuario_categoria_1, usuario_categoria_2)
+        #print(categoria_1, categoria_2, usuario_categoria_1, usuario_categoria_2)
+    else:
+        compatibilidad= 0.0
+        print(compatibilidad)
+    
+    
+    return usuario.username, compatibilidad
+
+# def calcular_compatibilidad(usuarios, categoria_1, categoria_2, usuario_categoria_1, usuario_categoria_2):
+#     resultados = []
+#     for usuario in usuarios:
+#         compatibilidad = 0.0
+        
+#         if categoria_1 == usuario_categoria_1 and categoria_2 == usuario_categoria_2:
+#             compatibilidad = 1.0
+#             print(categoria_1, categoria_2, usuario_categoria_1, usuario_categoria_2)
+#         elif categoria_1 == usuario_categoria_1 or categoria_2 == usuario_categoria_2:
+#             compatibilidad = 0.5
+#             print(categoria_1, categoria_2, usuario_categoria_1, usuario_categoria_2)
+#         #print(categoria_1, categoria_2, usuario_categoria_1, usuario_categoria_2)
+#         resultados.append((usuario.username, compatibilidad))
+    
+#     return resultados
+
+
+
+
+# def top_personalizado(request):
+#     if not request.user.is_authenticated or not Review.objects.filter(usuario=request.user).exists():
+#         # Usuario no logueado o sin reviews ingresadas, mostrar top 10
+#         libros_top = Libro.objects.annotate(num_comentarios=Count('review')).order_by('-valoracion', '-num_comentarios')[:3]
+#     else:
+#         categorias = Categoria.objects.all()
+#         score_1 = 0
+#         score_2 = 0
+#         categoria_1 = None
+#         categoria_2 = None
+        
+#         for categoria in categorias:
+#             suma = Review.objects.filter(usuario=request.user, libro__categorias=categoria).aggregate(Sum('valoracion')).get('valoracion__sum', 0)
+#             cantidad_review = Review.objects.filter(usuario=request.user, libro__categorias=categoria).count()
+
+#             if cantidad_review > 0:
+#                 score_categoria = suma / cantidad_review
+
+#                 if score_categoria > score_1:
+#                     score_2 = score_1
+#                     categoria_2 = categoria_1
+#                     score_1 = score_categoria
+#                     categoria_1 = categoria.nombre
+#                 elif score_categoria > score_2:
+#                     score_2 = score_categoria
+#                     categoria_2 = categoria.nombre
+        
+#         '''
+#         for categoria in categorias:
+#             suma = 0
+#             cantidad_review = Review.objects.filter(usuario=request.user, libro__categorias=categoria).count()
+#             print('La categoria es: ' + categoria.nombre)
+#             if cantidad_review > 0:
+#                 for review in Review.objects.filter(libro__categorias=categoria):
+#                     if review.usuario == request.user :
+#                         #categorias_lista = review.libro.categorias.values_list('nombre', flat=True)
+#                         #categorias_str = ', '.join(categorias_lista)
+#                         #print(categorias_str)
+#                         suma += review.valoracion
+
+#                 score_categoria = suma / cantidad_review
+
+#                 if score_categoria > score_1:
+#                     score_2 = score_1
+#                     categoria_2 = categoria_1
+#                     score_1 = score_categoria
+#                     categoria_1 = categoria.nombre
+#                 elif score_categoria > score_2:
+#                     score_2 = score_categoria
+#                     categoria_2 = categoria.nombre
+#         '''
+
+#         libros_1 = Libro.objects.filter(categorias__nombre=categoria_1).exclude(review__usuario=request.user).order_by('-valoracion')[:3]
+#         libros_2 = Libro.objects.filter(categorias__nombre=categoria_2).exclude(review__usuario=request.user).order_by('-valoracion')[:3]
+
+#         libros_top = libros_1 | libros_2
+
+
+
+#     #return render(request, 'top_personalizado.html', {'libros_top': libros_top, 'score_1': score_1, 'score_2': score_2, 'categoria_1': categoria_1, 'categoria_2': categoria_2, 'libros_1': libros_1, 'libros_2': libros_2})
+#     return render(request, 'top_personalizado.html', {'libros_top': libros_top})
+
+
+
+
+# def top_personalizado(request):
+#     if not request.user.is_authenticated or not Review.objects.filter(usuario=request.user).exists():
+#         # Usuario no logueado o sin reviews ingresadas, mostrar top 3S
+#         libros_top = Libro.objects.annotate(num_comentarios=Count('review')).order_by('-valoracion', '-num_comentarios')[:3]
+#     else:
+#         categorias = Categoria.objects.all()
+#         score_1 = 0
+#         score_2 = 0
+#         categoria_1 = None
+#         categoria_2 = None
+#         resultados = []
+        
+#         for categoria in categorias:
+#             suma = Review.objects.filter(usuario=request.user, libro__categorias=categoria).aggregate(Sum('valoracion')).get('valoracion__sum', 0)
+#             cantidad_review = Review.objects.filter(usuario=request.user, libro__categorias=categoria).count()
+
+#             if cantidad_review > 0:
+#                 score_categoria = suma / cantidad_review
+
+#                 if score_categoria > score_1:
+#                     score_2 = score_1
+#                     categoria_2 = categoria_1
+#                     score_1 = score_categoria
+#                     categoria_1 = categoria.nombre
+#                 elif score_categoria > score_2:
+#                     score_2 = score_categoria
+#                     categoria_2 = categoria.nombre
+#         # print(request.user)
+#         # print(categoria_1, categoria_2)
+
+#         usuarios = User.objects.all()
+#         libros = Libro.objects.all()
+        
+#         for usuario in usuarios:
+#             usuario_score_1 = 0
+#             usuario_score_2 = 0
+#             usuario_categoria_1 = None
+#             usuario_categoria_2 = None
+            
+#             print(usuario)
+#             for categoria in categorias:
+#                 usuario_suma = Review.objects.filter(usuario=usuario, libro__categorias=categoria).aggregate(Sum('valoracion')).get('valoracion__sum', 0)
+#                 usuario_cantidad_review = Review.objects.filter(usuario=usuario, libro__categorias=categoria).count()
+
+#                 if usuario_cantidad_review > 0:
+#                     usuario_score_categoria = usuario_suma / usuario_cantidad_review
+
+#                     if usuario_score_categoria > usuario_score_1:
+#                         usuario_score_2 = usuario_score_1
+#                         usuario_categoria_2 = usuario_categoria_1
+#                         usuario_score_1 = usuario_score_categoria
+#                         usuario_categoria_1 = categoria.nombre
+#                     elif usuario_score_categoria > usuario_score_2:
+#                         usuario_score_2 = usuario_score_categoria
+#                         usuario_categoria_2 = categoria.nombre
+#             print(usuario_categoria_1, usuario_categoria_2)
+#             # print(categoria_1, categoria_2)
+#             #usuarios = User.objects.exclude(username=request.user.username)
+            
+
+#             compatibilidad_usuarios = calcular_compatibilidad(usuario, categoria_1, categoria_2, usuario_categoria_1, usuario_categoria_2)
+#             print(compatibilidad_usuarios)
+#             resultados.append(compatibilidad_usuarios)
+            
+            
+        
+
+#         libros_1 = Libro.objects.filter(categorias__nombre=categoria_1).exclude(review__usuario=request.user).order_by('-valoracion')[:3]
+#         libros_2 = Libro.objects.filter(categorias__nombre=categoria_2).exclude(review__usuario=request.user).order_by('-valoracion')[:3]
+
+#         libros_top = libros_1 | libros_2
+
+        
+        
+#         print(compatibilidad_usuarios)
+
+#     return render(request, 'top_personalizado.html', {'libros_top': libros_top, 'compatibilidad_usuarios': compatibilidad_usuarios})
+
 def top_personalizado(request):
     if not request.user.is_authenticated or not Review.objects.filter(usuario=request.user).exists():
-        # Usuario no logueado o sin reviews ingresadas, mostrar top 10
+        # Usuario no logueado o sin reviews ingresadas, mostrar top 3
         libros_top = Libro.objects.annotate(num_comentarios=Count('review')).order_by('-valoracion', '-num_comentarios')[:3]
     else:
         categorias = Categoria.objects.all()
@@ -258,6 +449,7 @@ def top_personalizado(request):
         score_2 = 0
         categoria_1 = None
         categoria_2 = None
+        resultados = []
         
         for categoria in categorias:
             suma = Review.objects.filter(usuario=request.user, libro__categorias=categoria).aggregate(Sum('valoracion')).get('valoracion__sum', 0)
@@ -275,34 +467,38 @@ def top_personalizado(request):
                     score_2 = score_categoria
                     categoria_2 = categoria.nombre
         
-        '''
-        for categoria in categorias:
-            suma = 0
-            cantidad_review = Review.objects.filter(usuario=request.user, libro__categorias=categoria).count()
-            print('La categoria es: ' + categoria.nombre)
-            if cantidad_review > 0:
-                for review in Review.objects.filter(libro__categorias=categoria):
-                    if review.usuario == request.user :
-                        #categorias_lista = review.libro.categorias.values_list('nombre', flat=True)
-                        #categorias_str = ', '.join(categorias_lista)
-                        #print(categorias_str)
-                        suma += review.valoracion
+        usuarios = User.objects.all()
+        
+        for usuario in usuarios:
+            usuario_score_1 = 0
+            usuario_score_2 = 0
+            usuario_categoria_1 = None
+            usuario_categoria_2 = None
+            
+            for categoria in categorias:
+                usuario_suma = Review.objects.filter(usuario=usuario, libro__categorias=categoria).aggregate(Sum('valoracion')).get('valoracion__sum', 0)
+                usuario_cantidad_review = Review.objects.filter(usuario=usuario, libro__categorias=categoria).count()
 
-                score_categoria = suma / cantidad_review
+                if usuario_cantidad_review > 0:
+                    usuario_score_categoria = usuario_suma / usuario_cantidad_review
 
-                if score_categoria > score_1:
-                    score_2 = score_1
-                    categoria_2 = categoria_1
-                    score_1 = score_categoria
-                    categoria_1 = categoria.nombre
-                elif score_categoria > score_2:
-                    score_2 = score_categoria
-                    categoria_2 = categoria.nombre
-        '''
+                    if usuario_score_categoria > usuario_score_1:
+                        usuario_score_2 = usuario_score_1
+                        usuario_categoria_2 = usuario_categoria_1
+                        usuario_score_1 = usuario_score_categoria
+                        usuario_categoria_1 = categoria.nombre
+                    elif usuario_score_categoria > usuario_score_2:
+                        usuario_score_2 = usuario_score_categoria
+                        usuario_categoria_2 = categoria.nombre
 
+            compatibilidad_usuarios = calcular_compatibilidad(usuario, categoria_1, categoria_2, usuario_categoria_1, usuario_categoria_2)
+            resultados.append(compatibilidad_usuarios)
+        
+        print(resultados)
+        
         libros_1 = Libro.objects.filter(categorias__nombre=categoria_1).exclude(review__usuario=request.user).order_by('-valoracion')[:3]
         libros_2 = Libro.objects.filter(categorias__nombre=categoria_2).exclude(review__usuario=request.user).order_by('-valoracion')[:3]
 
         libros_top = libros_1 | libros_2
 
-    return render(request, 'top_personalizado.html', {'libros_top': libros_top, 'score_1': score_1, 'score_2': score_2, 'categoria_1': categoria_1, 'categoria_2': categoria_2, 'libros_1': libros_1, 'libros_2': libros_2})
+    return render(request, 'top_personalizado.html', {'libros_top': libros_top, 'resultados': resultados})

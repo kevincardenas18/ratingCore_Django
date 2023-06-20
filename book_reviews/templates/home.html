@@ -6,7 +6,24 @@
 <h2>Top 10 de Libros</h2>
 <ul>
   {% for libro in libros %}
-  <li>{{ libro.titulo }} - Valoración: {{ libro.valoracion }} - Comentarios: {{ libro.num_comentarios }}</li>
+  <div class="libro">
+    <div class="imagen">
+      <a href="{% url 'detalle_libro' libro_id=libro.id %}">
+        <img src="{{ libro.imagen }}" alt="{{ libro.titulo }}">
+      </a>
+    </div>
+    <div class="detalles">
+      <h2>
+        <a href="{% url 'detalle_libro' libro_id=libro.id %}">
+          {{ libro.titulo }}
+        </a>
+      </h2>
+      <p>Autor: <a href="{% url 'detalle_autor' autor_id=libro.autor.id %}">{{ libro.autor.nombre }}</a></p>
+      <p>Categorías: {{ libro.categorias.all|join:", " }}</p>
+      <p>Descripción: {{ libro.resumen }}</p>
+      <p>Valoración: {{ libro.valoracion }}</p>
+    </div>
+  </div>
   {% endfor %}
 </ul>
 {% endblock %}
