@@ -15,8 +15,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from book_reviews import views
+from book_reviews.api.router import router_categorias, router_autor
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -40,5 +41,7 @@ urlpatterns = [
     path('categorias/agregar/', views.agregar_categoria, name='agregar_categoria'),
     path('personalizado/', views.top_personalizado, name='top_personalizado'),
     path('personalizado/calcular_compatibilidad', views.calcular_compatibilidad, name='calcular_compatibilidad'),
+    path('api/', include(router_categorias.urls)),
+    path('api/', include(router_autor.urls)),
 ]
 
